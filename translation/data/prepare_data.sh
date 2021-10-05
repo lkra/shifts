@@ -119,7 +119,7 @@ cat $orig/train-data/news.ru |
 
 
 echo "Remove Deplications, clean data"
-paste $tmp/train.tags.$lang.tok.en $tmp/train.tags.$lang.tok.ru | python $CLEAN_DATA --directions en-ru --no-zero-len --max-sent-len 1024 --no-bad-utf --max-jaccard-coef-exclusive 0.05 --filter-equality >>$tmp/tmp
+paste $tmp/train.tags.$lang.tok.en $tmp/train.tags.$lang.tok.ru | python3 $CLEAN_DATA --directions en-ru --no-zero-len --max-sent-len 1024 --no-bad-utf --max-jaccard-coef-exclusive 0.05 --filter-equality >>$tmp/tmp
 awk -F "\t" '{print $1}' $tmp/tmp > $tmp/train.tags.$lang.clean.tok.en
 awk -F "\t" '{print $2}' $tmp/tmp > $tmp/train.tags.$lang.clean.tok.ru
 rm $tmp/tmp
@@ -161,12 +161,12 @@ for l in $src $tgt; do
 done
 
 echo "learn_bpe.py on ${TRAIN}..."
-python $BPEROOT/learn_bpe.py -s $BPE_TOKENS <$TRAIN >$BPE_CODE
+python3 $BPEROOT/learn_bpe.py -s $BPE_TOKENS <$TRAIN >$BPE_CODE
 
 for L in $src $tgt; do
   for f in train.$L valid.$L test19.$L reddit_dev.$L; do
     echo "apply_bpe.py to ${f}..."
-    python $BPEROOT/apply_bpe.py -c $BPE_CODE <$tmp/$f >$tmp/bpe.$f
+    python3 $BPEROOT/apply_bpe.py -c $BPE_CODE <$tmp/$f >$tmp/bpe.$f
   done
 done
 
